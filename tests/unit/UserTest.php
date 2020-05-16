@@ -3,6 +3,7 @@
 namespace tests;
 
 use app\models;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * UserTest contains test cases for user model
@@ -14,11 +15,11 @@ use app\models;
  */
 class UserTest extends \Codeception\Test\Unit
 {
-    private $testUserModel;
+    private $githubTestUserModel;
 
     public function setUp(): void
     {
-        $this->testUserModel = new models\User('123', 'testUserName', 'github');
+        $this->githubTestUserModel = new models\User('123', 'githubTestUserName', 'github');
     }
 
     /**
@@ -46,10 +47,10 @@ class UserTest extends \Codeception\Test\Unit
     {
         $greatRatingTestRepo = new $repoClassName('greatRatingTestRepo', 10, 20, 30);
         $littleRatingTestRepo = new $repoClassName('littleRatingTestRepo', 1, 2, 3);
-        $this->testUserModel->addRepos(array($greatRatingTestRepo, $littleRatingTestRepo));
-        $data = $this->testUserModel->getData();
+        $this->githubTestUserModel->addRepos(array($greatRatingTestRepo, $littleRatingTestRepo));
+        $data = $this->githubTestUserModel->getData();
         $this->assertEquals(
-            [$this->testUserModel->getTotalRating(), 'greatRatingTestRepo', 'littleRatingTestRepo'],
+            [$this->githubTestUserModel->getTotalRating(), 'greatRatingTestRepo', 'littleRatingTestRepo'],
             [$data['total-rating'], $data['repo'][0]['name'], $data['repo'][1]['name']]
         );
     }
@@ -62,7 +63,7 @@ class UserTest extends \Codeception\Test\Unit
     public function testAddingReposUnsuccessful()
     {
         $this->expectException(\LogicException::class);
-        $this->testUserModel->addRepos(['firstRepo', 'secondRepo']);
+        $this->githubTestUserModel->addRepos(['firstRepo', 'secondRepo']);
     }
 
     /**
@@ -76,9 +77,9 @@ class UserTest extends \Codeception\Test\Unit
     {
         $firstTestRepo = new $repoClassName('firstTestRepo', 10, 20, 30);
         $secondTestRepo = new $repoClassName('secondTestRepo', 1, 2, 3);
-        $this->testUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
-        $actualRating = $this->testUserModel->getTotalRating();
-        $this->assertEquals($this->testUserModel->getTotalRating(), $actualRating);
+        $this->githubTestUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $actualRating = $this->githubTestUserModel->getTotalRating();
+        $this->assertEquals($this->githubTestUserModel->getTotalRating(), $actualRating);
     }
 
     /**
@@ -88,7 +89,7 @@ class UserTest extends \Codeception\Test\Unit
      */
     public function testTotalRatingCountNoRepos()
     {
-        $actualRating = $this->testUserModel->getTotalRating();
+        $actualRating = $this->githubTestUserModel->getTotalRating();
         $this->assertEquals(0.0, $actualRating);
     }
 
@@ -101,13 +102,13 @@ class UserTest extends \Codeception\Test\Unit
     {
         $firstTestRepo = new models\GitlabRepo('firstTestRepo', 10, 20);
         $secondTestRepo = new models\GitlabRepo('secondTestRepo', 1, 2);
-        $this->testUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
-        $data = $this->testUserModel->getData();
+        $this->githubTestUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $data = $this->githubTestUserModel->getData();
         $this->assertEquals(
             [
-                $this->testUserModel->getName(),
-                $this->testUserModel->getPlatform(),
-                $this->testUserModel->getTotalRating(),
+                $this->githubTestUserModel->getName(),
+                $this->githubTestUserModel->getPlatform(),
+                $this->githubTestUserModel->getTotalRating(),
                 [],
                 ['name' => 'firstTestRepo', 'fork-count' => 10, 'start-count' => 20, 'rating' => $firstTestRepo->getRating()],
                 ['name' => 'secondTestRepo', 'fork-count' => 1, 'start-count' => 2, 'rating' => $secondTestRepo->getRating()]
@@ -131,13 +132,13 @@ class UserTest extends \Codeception\Test\Unit
     {
         $firstTestRepo = new models\GithubRepo('firstTestRepo', 10, 20, 30);
         $secondTestRepo = new models\GithubRepo('secondTestRepo', 1, 2, 3);
-        $this->testUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
-        $data = $this->testUserModel->getData();
+        $this->githubTestUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $data = $this->githubTestUserModel->getData();
         $this->assertEquals(
             [
-                $this->testUserModel->getName(),
-                $this->testUserModel->getPlatform(),
-                $this->testUserModel->getTotalRating(),
+                $this->githubTestUserModel->getName(),
+                $this->githubTestUserModel->getPlatform(),
+                $this->githubTestUserModel->getTotalRating(),
                 [],
                 ['name' => 'firstTestRepo', 'fork-count' => 10, 'start-count' => 20, 'watcher-count' => 30, 'rating' => $firstTestRepo->getRating()],
                 ['name' => 'secondTestRepo', 'fork-count' => 1, 'start-count' => 2, 'watcher-count' => 3, 'rating' => $secondTestRepo->getRating()]
@@ -161,13 +162,13 @@ class UserTest extends \Codeception\Test\Unit
     {
         $firstTestRepo = new models\BitbucketRepo('firstTestRepo', 10, 30);
         $secondTestRepo = new models\BitbucketRepo('secondTestRepo', 1, 3);
-        $this->testUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
-        $data = $this->testUserModel->getData();
+        $this->githubTestUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $data = $this->githubTestUserModel->getData();
         $this->assertEquals(
             [
-                $this->testUserModel->getName(),
-                $this->testUserModel->getPlatform(),
-                $this->testUserModel->getTotalRating(),
+                $this->githubTestUserModel->getName(),
+                $this->githubTestUserModel->getPlatform(),
+                $this->githubTestUserModel->getTotalRating(),
                 [],
                 ['name' => 'firstTestRepo', 'fork-count' => 10, 'watcher-count' => 30, 'rating' => $firstTestRepo->getRating()],
                 ['name' => 'secondTestRepo', 'fork-count' => 1, 'watcher-count' => 3, 'rating' => $secondTestRepo->getRating()]
@@ -183,14 +184,50 @@ class UserTest extends \Codeception\Test\Unit
     }
 
     /**
+     * Generating different repo names and expected strings
+     *
+     * @return array
+     */
+    public function getRepoClassAndExpectedString()
+    {
+        return array(
+            array(
+                'app\models\GithubRepo',
+                'githubTestUserName (github)                                                                  22 🏆
+==================================================================================================
+greatRatingTestRepo                                                           10 ⇅   20 ★   30 👁️
+littleRatingTestRepo                                                           1 ⇅    2 ★    3 👁️
+'),
+            array(
+                'app\models\GitlabRepo',
+                'githubTestUserName (github)                                                                  16 🏆
+==================================================================================================
+greatRatingTestRepo                                                           10 ⇅   20 ★
+littleRatingTestRepo                                                           1 ⇅    2 ★
+'),
+            array(
+                'app\models\BitbucketRepo',
+                'githubTestUserName (github)                                                                  22 🏆
+==================================================================================================
+greatRatingTestRepo                                                           10 ⇅          20 👁️
+littleRatingTestRepo                                                           1 ⇅           2 👁️
+')
+        );
+    }
+
+    /**
      * Test case for user model __toString verification
      *
+     * @dataProvider getRepoClassAndExpectedString
+     * @param string $repoClassName
+     * @param string $expectedString
      * @return void
      */
-    public function testStringify()
+    public function testStringify(string $repoClassName, string $expectedString)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $firstTestRepo = new $repoClassName('greatRatingTestRepo', 10, 20, 30);
+        $secondTestRepo = new $repoClassName('littleRatingTestRepo', 1, 2, 3);
+        $this->githubTestUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $this->assertEquals($expectedString, (string)$this->githubTestUserModel);
     }
 }

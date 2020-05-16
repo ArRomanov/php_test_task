@@ -23,7 +23,10 @@ class SearcherTest extends \Codeception\Test\Unit
     public function getUsersAndPlatformsForSuccess()
     {
         return array(
-            array('github', 'ArRomanov', 'ArRomanov (github)                                                                            0 🏆
+            array(
+                'github',
+                'ArRomanov',
+                'ArRomanov (github)                                                                            0 🏆
 ==================================================================================================
 aqa-ci-demo                                                                    0 ⇅    0 ★    0 👁️
 aqa2.4                                                                         0 ⇅    0 ★    0 👁️
@@ -39,7 +42,10 @@ QlTraining                                                                     0
 QualityLabTask                                                                 0 ⇅    0 ★    0 👁️
 ubuntu-16-postinstall                                                          0 ⇅    0 ★    0 👁️
 '),
-            array('bitbucket', '557058:955cce5b-b3ce-440a-9d40-5ba30248e3fc', 'ArRomanov (bitbucket)                                                                        18 🏆
+            array(
+                'bitbucket',
+                '557058:955cce5b-b3ce-440a-9d40-5ba30248e3fc',
+                'ArRomanov (bitbucket)                                                                        18 🏆
 ==================================================================================================
 meddlesome_telebot                                                             1 ⇅           1 👁️
 video_telebot                                                                  1 ⇅           1 👁️
