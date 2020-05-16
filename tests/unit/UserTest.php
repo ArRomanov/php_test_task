@@ -6,7 +6,7 @@ use app\models;
 
 /**
  * UserTest contains test cases for user model
- * 
+ *
  * IMPORTANT NOTE:
  * All test cases down below must be implemented
  * You can add new test cases on your own
@@ -14,19 +14,56 @@ use app\models;
  */
 class UserTest extends \Codeception\Test\Unit
 {
+    private $testUserModel;
+
+    public function setUp(): void
+    {
+        $this->testUserModel = new models\User('123', 'testUserName', 'github');
+    }
+
     /**
-     * Test case for adding repo models to user model
-     * 
-     * IMPORTANT NOTE:
-     * Should cover succeeded and failed suites
+     * Generating data for testAddingRepos method
+     *
+     * @return array
+     */
+    public function getRepoNamesAndCountedRating()
+    {
+        return array(
+            array('app\models\GithubRepo', 22.0),
+            array('app\models\GitlabRepo', 16.5),
+            array('app\models\BitbucketRepo', 22.0)
+        );
+    }
+
+    /**
+     * Test case for adding repo models to user model (successful)
+     *
+     * @dataProvider getRepoNamesAndCountedRating
+     * @param string $repoClassName
+     * @param float $expectedCountedRating - посчитанный рейтинг двух репозиториев (отличается у платформ)
+     * @return void
+     */
+    public function testAddingReposSucceed(string $repoClassName, float $expectedCountedRating)
+    {
+        $greatRatingTestRepo = new $repoClassName('greatRatingTestRepo', 10, 20, 30);
+        $littleRatingTestRepo = new $repoClassName('littleRatingTestRepo', 1, 2, 3);
+        $this->testUserModel->addRepos(array($greatRatingTestRepo, $littleRatingTestRepo));
+        $data = $this->testUserModel->getData();
+        $this->assertEquals(
+            [$expectedCountedRating, 'greatRatingTestRepo', 'littleRatingTestRepo'],
+            [$data['total-rating'], $data['repo'][0]['name'], $data['repo'][1]['name']]
+        );
+    }
+
+    /**
+     * Test case for adding repo models to user model (unsuccessful)
      *
      * @return void
      */
-    public function testAddingRepos()
+    public function testAddingReposUnsuccessful()
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $this->expectException(\LogicException::class);
+        $this->testUserModel->addRepos(['firstRepo', 'secondRepo']);
     }
 
     /**
