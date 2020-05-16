@@ -67,15 +67,31 @@ class UserTest extends \Codeception\Test\Unit
     }
 
     /**
-     * Test case for counting total user rating
+     * Test case for counting total user rating (with repos)
+     *
+     * @dataProvider getRepoNamesAndCountedRating
+     * @param string $repoClassName
+     * @param float $expectedCountedRating - посчитанный рейтинг двух репозиториев (отличается у платформ)
+     * @return void
+     */
+    public function testTotalRatingCountWithRepos(string $repoClassName, float $expectedCountedRating)
+    {
+        $firstTestRepo = new $repoClassName('firstTestRepo', 10, 20, 30);
+        $secondTestRepo = new $repoClassName('secondTestRepo', 1, 2, 3);
+        $this->testUserModel->addRepos(array($firstTestRepo, $secondTestRepo));
+        $actualRating = $this->testUserModel->getTotalRating();
+        $this->assertEquals($expectedCountedRating, $actualRating);
+    }
+
+    /**
+     * Test case for counting total user rating (no repos)
      *
      * @return void
      */
-    public function testTotalRatingCount()
+    public function testTotalRatingCountNoRepos()
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $actualRating = $this->testUserModel->getTotalRating();
+        $this->assertEquals(0.0, $actualRating);
     }
 
     /**
