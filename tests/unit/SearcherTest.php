@@ -66,7 +66,7 @@ Imhio_backend_tests                                                            1
      * @param $expectedUser
      * @return void
      */
-    public function testSearcherSuccessful($platform_name, $userName, $expectedUser)
+    public function testSearcherSuccessful(string $platform_name, string $userName, string $expectedUser)
     {
         $platformFactory = new components\Factory();
         $platform = $platformFactory->create($platform_name);
@@ -84,6 +84,7 @@ Imhio_backend_tests                                                            1
     {
         return array(
             array('github', 'FakeUser'),
+            array('bitbucket', ''),
             array('gitlab', 'arromanov')
         );
     }
@@ -92,16 +93,16 @@ Imhio_backend_tests                                                            1
      * Test case for searching via several platforms (Unsuccessful)
      *
      * @dataProvider getUsersAndPlatformsForFailure
-     * @param $platform_name
+     * @param $platformName
      * @param $userName
      * @param $expectedUser
      */
-    public function testSearcherUnsuccessful($platform_name, $userName)
+    public function testSearcherUnsuccessful(string $platformName, string $userName)
     {
         $platformFactory = new components\Factory();
-        $platform = $platformFactory->create($platform_name);
+        $platform = $platformFactory->create($platformName);
         $searcher = new components\Searcher();
         $users = $searcher->search(array($platform), array($userName));
-        $this->assertCount(0, $users);
+        $this->assertEmpty($users);
     }
 }
