@@ -82,14 +82,34 @@ class BitbucketRepoTest extends \Codeception\Test\Unit
     }
 
     /**
+     * Generating all bitbucket repo data for stringify
+     *
+     * @return array
+     */
+    public function getAllBitbucketRepoDataForStringify()
+    {
+        return array(
+            array('repoName', 0, 0, 'repoName                                                                       0 ⇅           0 👁️'),
+            array('ИмяРепозитория', 0, 1, 'ИмяРепозитория                                                   0 ⇅           1 👁️'),
+            array('!@#$%^&*', 1, 1, '!@#$%^&*                                                                       1 ⇅           1 👁️'),
+            array('repo-name', 1, 0, 'repo-name                                                                      1 ⇅           0 👁️'),
+            array('repo.name', 10, 20, 'repo.name                                                                     10 ⇅          20 👁️')
+        );
+    }
+
+    /**
      * Test case for repo model __toString verification
      *
+     * @dataProvider getAllBitbucketRepoDataForStringify
+     * @param string $repoName
+     * @param int $forkCount
+     * @param int $watcherCount
+     * @param string $expectedString
      * @return void
      */
-    public function testStringify()
+    public function testStringify(string $repoName, int $forkCount, int $watcherCount, string $expectedString)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $bitbucketTestRepo = new models\BitbucketRepo($repoName, $forkCount, $watcherCount);
+        $this->assertEquals($expectedString, (string)$bitbucketTestRepo);
     }
 }
