@@ -111,4 +111,18 @@ Imhio_backend_tests                                                            1
         $users = $searcher->search(array($platform), array($userName));
         $this->assertEmpty($users);
     }
+
+    /**
+     * Test case for searching for two users
+     *
+     */
+    public function testSearcherForTwoUsers()
+    {
+        $userNames = array('github', 'githubteacher');
+        $platformFactory = new components\Factory();
+        $platform = $platformFactory->create('github');
+        $searcher = new components\Searcher();
+        $users = $searcher->search(array($platform), $userNames);
+        $this->assertEquals($userNames, [$users[0]['identifier'], $users[1]['identifier']]);
+    }
 }

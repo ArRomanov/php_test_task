@@ -43,6 +43,21 @@ class FactoryTest extends \Codeception\Test\Unit
     }
 
     /**
+     * Test case for creating platform component (from cache)
+     *
+     * @dataProvider getUsersAndPlatformsForSuccess
+     * @param string $platformName
+     * @param string $expectedInstance
+     * @return void
+     */
+    public function testCreateFromCacheSucceed(string $platformName, string $expectedInstance)
+    {
+        $platformFactory = new components\Factory();
+        $platformFactory->create($platformName);
+        $this->assertInstanceOf($expectedInstance, $platformFactory->create($platformName));
+    }
+
+    /**
      * Generating unsuccessful test data
      *
      * @return array
