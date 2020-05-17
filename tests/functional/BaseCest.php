@@ -2,9 +2,9 @@
 
 /**
  * Base contains test cases for testing api endpoint
- * 
+ *
  * @see https://codeception.com/docs/modules/Yii2
- * 
+ *
  * IMPORTANT NOTE:
  * All test cases down below must be implemented
  * You can add new test cases on your own
@@ -76,9 +76,16 @@ class BaseCest
      */
     public function cestBadParams(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        //ToDo - I couldn't check this exception. I don't know how to do it.
+
+        $I->amOnPage([
+            'base/api',
+            'users' => 123,
+            'platforms' => 'kfr'
+        ]);
+        $I->expectThrowable(LogicException::class, function () use ($I) {
+            $I->grabPageSource();
+        });
     }
 
     /**
@@ -88,9 +95,13 @@ class BaseCest
      */
     public function cestEmptyUsers(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => [],
+            'platforms' => ['github']
+        ]);
+        $expected = '<pre>Bad Request: Missing required parameters: users</pre>';
+        $I->assertEquals($expected, $I->grabPageSource());
     }
 
     /**
@@ -100,9 +111,13 @@ class BaseCest
      */
     public function cestEmptyPlatforms(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => ['kfr'],
+            'platforms' => []
+        ]);
+        $expected = '<pre>Bad Request: Missing required parameters: platforms</pre>';
+        $I->assertEquals($expected, $I->grabPageSource());
     }
 
     /**
@@ -112,9 +127,13 @@ class BaseCest
      */
     public function cestSeveralPlatforms(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => ['kfr'],
+            'platforms' => ['github', 'gitlab']
+        ]);
+        $expected = '[{"name":"kfr","platform":"github","total-rating":1.5,"repos":[],"repo":[{"name":"kf-cli","fork-count":0,"start-count":2,"watcher-count":2,"rating":1},{"name":"cards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"UdaciCards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"unikgen","fork-count":0,"start-count":1,"watcher-count":1,"rating":0.5}]}]';
+        $I->assertEquals($expected, $I->grabPageSource());
     }
 
     /**
@@ -124,9 +143,13 @@ class BaseCest
      */
     public function cestSeveralUsers(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => ['kfr', 'ArRomanov'],
+            'platforms' => ['github']
+        ]);
+        $expected = '[{"name":"kfr","platform":"github","total-rating":1.5,"repos":[],"repo":[{"name":"kf-cli","fork-count":0,"start-count":2,"watcher-count":2,"rating":1},{"name":"cards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"UdaciCards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"unikgen","fork-count":0,"start-count":1,"watcher-count":1,"rating":0.5}]},{"name":"ArRomanov","platform":"github","total-rating":0,"repos":[],"repo":[{"name":"aqa-ci-demo","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"aqa2.4","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"at.info-knowledge-base","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"awesome-test-automation","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"idea_settings","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"jmeter-loadtestweb","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"maxilect_test_task","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"netology_test_task","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"php_test_task","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"python2.2","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"QlTraining","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"QualityLabTask","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"ubuntu-16-postinstall","fork-count":0,"start-count":0,"watcher-count":0,"rating":0}]}]';
+        $I->assertEquals($expected, $I->grabPageSource());
     }
 
     /**
@@ -136,9 +159,16 @@ class BaseCest
      */
     public function cestUnknownPlatforms(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        //ToDo - I couldn't check this exception. I don't know how to do it.
+
+        $I->amOnPage([
+            'base/api',
+            'users' => ['kfr'],
+            'platforms' => ['githup']
+        ]);
+        $I->expectThrowable(\LogicException::class, function () use ($I) {
+            $I->grabPageSource();
+        });
     }
 
     /**
@@ -148,9 +178,12 @@ class BaseCest
      */
     public function cestUnknownUsers(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => ['dsgvsfdversb'],
+            'platforms' => ['github']
+        ]);
+        $I->assertEquals('[]', $I->grabPageSource());
     }
 
     /**
@@ -160,9 +193,13 @@ class BaseCest
      */
     public function cestMixedUsers(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $I->amOnPage([
+            'base/api',
+            'users' => ['dsgvsfdversb', 'kfr'],
+            'platforms' => ['github']
+        ]);
+        $expected = '[{"name":"kfr","platform":"github","total-rating":1.5,"repos":[],"repo":[{"name":"kf-cli","fork-count":0,"start-count":2,"watcher-count":2,"rating":1},{"name":"cards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"UdaciCards","fork-count":0,"start-count":0,"watcher-count":0,"rating":0},{"name":"unikgen","fork-count":0,"start-count":1,"watcher-count":1,"rating":0.5}]}]';
+        $I->assertEquals($expected, $I->grabPageSource());
     }
 
     /**
@@ -172,8 +209,15 @@ class BaseCest
      */
     public function cestMixedPlatforms(\FunctionalTester $I)
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        //ToDo - I couldn't check this exception. I don't know how to do it.
+
+        $I->amOnPage([
+            'base/api',
+            'users' => ['kfr'],
+            'platforms' => ['github', 'githup']
+        ]);
+        $I->expectThrowable(\LogicException::class, function () use ($I) {
+            $I->grabPageSource();
+        });
     }
 }
