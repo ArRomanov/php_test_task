@@ -14,16 +14,36 @@ use app\models;
  */
 class BitbucketRepoTest extends \Codeception\Test\Unit
 {
+
+    /**
+     * Generating different repo forkCount, watcher count and rating
+     *
+     * @return array
+     */
+    public function getForkCountWatcherCountAndRating()
+    {
+        return array(
+            array(0, 0, 0.0),
+            array(0, 1, 0.5),
+            array(1, 1, 1.5),
+            array(1, 0, 1.0),
+            array(10, 20, 20.0)
+        );
+    }
+
     /**
      * Test case for counting repo rating
      *
+     * @dataProvider getForkCountWatcherCountAndRating
+     * @param int $forkCount
+     * @param int $watcherCount
+     * @param int $expectedRating
      * @return void
      */
-    public function testRatingCount()
+    public function testRatingCount(int $forkCount, int $watcherCount, float $expectedRating )
     {
-        /**
-         * @todo IMPLEMENT THIS
-         */
+        $bitbucketTestRepo = new models\BitbucketRepo('bitbucketTestRepo', $forkCount, $watcherCount);
+        $this->assertEquals($expectedRating, $bitbucketTestRepo->getRating());
     }
 
     /**
