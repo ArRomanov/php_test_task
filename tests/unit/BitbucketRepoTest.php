@@ -16,7 +16,7 @@ class BitbucketRepoTest extends \Codeception\Test\Unit
 {
 
     /**
-     * Generating different repo forkCount, watcher count and rating
+     * Generating counts of forks, of watchers and rating
      *
      * @return array
      */
